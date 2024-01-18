@@ -66,4 +66,30 @@ public class TodoController {
                     retrieve
                 );
     }
+
+    //할 일 삭제 요청
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTodo(@PathVariable String id){
+        log.info("/api/todos/{} DLELTE !!", id);
+
+        if(id == null || id.trim().equals("")){
+            return ResponseEntity.badRequest()
+                    .body(
+                            TodoListResponseDTO.builder()
+                                    .error("아이디는 공백일 수 없습니다.")
+                                    .build()
+                    );
+        }
+
+        try{
+            TodoListResponseDTO dtoList = todoService.delete(id);
+            return ResponseEntity.ok().body(dtoList);
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(
+                    TodoListResponseDTO.builder()
+                            .error(e.getMessage())
+                            .build()
+            );
+        }
+    }
 }
