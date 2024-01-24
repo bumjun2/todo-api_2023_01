@@ -1,8 +1,11 @@
 package com.study.todoapi.user.service;
 
+import com.study.todoapi.auth.TokenProvider;
 import com.study.todoapi.exception.DuplicatedEmailException;
 import com.study.todoapi.exception.NoRegisteredArgumentsException;
+import com.study.todoapi.user.dto.request.LoginRequestDTO;
 import com.study.todoapi.user.dto.request.UserSignUpRequestDTO;
+import com.study.todoapi.user.dto.response.LoginResponseDTO;
 import com.study.todoapi.user.dto.response.UserSignUpResponseDTO;
 import com.study.todoapi.user.entity.User;
 import com.study.todoapi.user.repository.UserRepository;
@@ -12,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -19,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
+    private final TokenProvider provider;
 
     //화원 가입 처리
     public UserSignUpResponseDTO create(UserSignUpRequestDTO dto) {
@@ -45,6 +51,29 @@ public class UserService {
     //에미엘 중복확인
     public boolean isDuplicateEmail(String email){
         return userRepository.existsByEmail(email);
+    }
+
+    //회원 인증(로그인)
+    public LoginResponseDTO authenticate(LoginRequestDTO dto){
+
+        //이메일을 통해 회원 정보를 조회
+        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(
+                () -> new RuntimeException("가입된 회원이 아닙니다.")
+        );
+
+        //패스워드 검증
+        String inputPassword = dto.getPassword();
+        String encodingPassword = user.getPassword();
+
+        if (!encoder.matches(inputPassword, encodingPassword)){
+            throw new RuntimeException("비밀번호가 틀렸습니다.");
+        }
+
+        // 로그인 성공 후 이제 어떻게 할 것인가 ? 세션에 저장할 것인가 토큰을 발급할 것인가
+        String token = provider.createToken(user);
+
+        // 클라이언트에게 토큰을 발급해서 제공
+        return new LoginResponseDTO(user, token);
     }
 
 
