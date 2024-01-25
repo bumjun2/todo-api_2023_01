@@ -13,7 +13,7 @@ import java.util.List;
 
 @Setter
 @Getter
-@ToString
+@ToString(exclude = {"todos"})
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
@@ -48,4 +48,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Todo> todos = new ArrayList<>();
 
+    public void addTodo(Todo save) {
+        this.todos.add(save);
+        save.setUser(this);
+    }
 }
