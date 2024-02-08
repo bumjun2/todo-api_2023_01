@@ -11,22 +11,21 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Setter
-@Getter
-@ToString(exclude = {"todos"})
+@Setter @Getter
+@ToString(exclude = "todoList")
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 @Entity
 @Table(name = "tbl_user")
 public class User {
+
     @Id
     @Column(name = "user_id")
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    private String id; // account가 아니라 랜덤식별 번호
+    private String id; // account가 아니라 랜덤식별번호
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -42,14 +41,16 @@ public class User {
 
     @Enumerated(EnumType.STRING)
 //    @ColumnDefault("'COMMON'")
-    @Builder.Default
+    @Builder.Default // 회원가입시 자동으로 기본값 처리
     private Role role = Role.COMMON;
 
-    @OneToMany(mappedBy = "user")
-    private List<Todo> todos = new ArrayList<>();
+    private String profileImg; //프로필 사진 이미지 경로
 
-    public void addTodo(Todo save) {
-        this.todos.add(save);
-        save.setUser(this);
+    @OneToMany(mappedBy = "user")
+    private List<Todo> todoList = new ArrayList<>();
+
+    public void addTodo(Todo todo) {
+        this.todoList.add(todo);
+        todo.setUser(this);
     }
 }

@@ -6,7 +6,6 @@ import com.study.todoapi.user.entity.User;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -23,12 +22,16 @@ public class LoginResponseDTO {
     @JsonFormat(pattern = "yyyy년 MM월 dd일")
     private LocalDate joinDate;
 
-    private String token;
+    private String token; // 로그인 인증토큰
 
-    public LoginResponseDTO(User user, String token){
+    private String role; // 등급 정보
+
+    public LoginResponseDTO(User user, String token) {
         this.email = user.getEmail();
         this.userName = user.getUserName();
         this.joinDate = LocalDate.from(user.getJoinDate());
         this.token = token;
+        this.role = user.getRole().toString();
     }
+
 }

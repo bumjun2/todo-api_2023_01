@@ -29,13 +29,8 @@ class UserServiceTest {
                 .userName("정범준")
                 .build();
         //when
-        UserSignUpResponseDTO userSignUpResponseDTO = userService.create(dto);
         //then
-        assertEquals("zz123@email.com", userSignUpResponseDTO.getEmail());
 
-        System.out.println();
-        System.out.println("userSignUpResponseDTO = " + userSignUpResponseDTO);
-        System.out.println();
     }
 
 

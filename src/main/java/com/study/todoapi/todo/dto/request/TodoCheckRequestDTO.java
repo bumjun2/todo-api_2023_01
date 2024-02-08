@@ -1,5 +1,6 @@
 package com.study.todoapi.todo.dto.request;
 
+
 import lombok.*;
 
 @Setter
@@ -10,6 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class TodoCheckRequestDTO {
+
     private String id;
-    private boolean check;
+    private boolean done;
 }

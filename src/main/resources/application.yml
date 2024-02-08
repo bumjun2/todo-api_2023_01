@@ -1,12 +1,12 @@
 server:
-  port: 8484
+  port: 80
 
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/spring
+    url: jdbc:mariadb://spring-database.clsik8mgctc9.ap-northeast-2.rds.amazonaws.com/spring
     username: root
-    password: mariadb
+    password: mariadb1
   jpa:
     # SQL??? ?? ? ?? DBMS? ???? ??? ????
     database-platform: org.hibernate.dialect.MariaDB106Dialect
@@ -17,6 +17,10 @@ spring:
       hibernate:
         format_sql: true   # SQL ??? ????? ??? ?? ??
     database: mysql  # DBMS ?? ??
+  servlet:
+    multipart:
+      max-file-size: 3MB #1개의 파일의 최대업로드 사이즈
+      max-request-size: 20MB #1번 요청에 들어올 최대 업로드 사이즈
 
 logging:
   level:
@@ -27,3 +31,14 @@ logging:
 
 jwt:
   secret: /aSAfrn4b1lBYJyJyDUvphlSyZucyY9570ZCpRzP5S+Fstak+086k7cd/LAluhyOx5QTzjtwD4SOjZnl5ciQjRQ==
+
+upload:
+  path: /Users/bum_jun2/Desktop/todo-react-app202401
+
+aws:
+  credentials:
+    accessKey: AKIAQ3EGUXRPEG5R2M4L
+    secretKey: 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
+  region: ap-northeast-2
+  bucketName: spring-todo-api-file-bucket2835
+
